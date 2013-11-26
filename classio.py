@@ -1,21 +1,5 @@
 import glob
 
-def parse_class(slug):
-	test, train = []
-	#testfiles = glob.glob('./data/' + slug +'test')
-	for varfile in testfiles:
-		f = open(varfile, 'r')
-		for line in f.readlines():
-			test.append(line, slug)
-		f.close()
-	trainfiles = glob.glob('./data/' + slug +'train')
-	for varfile in trainfiles:
-		f = open(varfile, 'r')
-		for line in f.readlines():
-			train.append(line, slug)
-		f.close()
-	return train, test
-
 def get_all_data():
 	test = []
 	train = []
