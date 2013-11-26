@@ -1,0 +1,57 @@
+
+<html>
+    <meta content="RecommendTwit" property="og:title" />
+	<meta name = "viewport" content="width=device-width, initial-scale=1.0">
+
+  <head>
+  <link href = "http://veriparty.parseapp.com/css/bootstrap.css" rel="stylesheet" media="screen">
+      <script src="http://code.jquery.com/jquery-1.8.3.min.js"></script>
+
+    <title>RecommendTwit - who do you like?</title>
+  </head>
+  <body>
+  <br>
+  <br>
+  <h1>RecommendTwit</h1>
+  <br>
+  <h3>Enter your twitter handle to see your tweets and your automated reader level!</h3>
+  <br>
+	<h3> Enter Twitter Handle: <br> 
+		{{form.handle(size=80)}}
+		{{form.submit()}}
+		<br>
+	
+	</h3>
+	
+<div id="listurl"></div>
+	<br>
+  </body>
+  <footer class="span8">
+  <script>
+	  $('#submit').click(function() { 
+		  $.getJSON('http://localhost:5000/tweets/' + $('#handle').val(), function(data) { 
+			  alert(data)
+			  $.get('http://localhost:5000/level/' + $('#handle').val(), function (num) {
+				$("#listurl").empty();
+				$("#listurl").append( '<h3 class="appendedstuff"> YOUR AUTOMATED READABILITY INDEX IS ' + num + '</h3>')
+			});
+		  });
+		  /*
+		  $.ajax({
+			  url: "http://127.0.0.1:5000/tweets/" + $('#handle').val(),
+			  type: "get",
+			  contentType: "application/json",
+			  success: function (response) {
+				alert('Success!')
+				alert(html(response));
+			  }
+		  });
+		  */
+	  });
+  function partydropdown() {
+    $("#listurl").empty();
+	$("#listurl").append('<h3 class="appendedstuff">http://veriparty.parseapp.com/event.html?'+(($("#partyurl").val().split('\/'))[4])+'</h3>');
+	}
+  </script>
+  
+  </html>
