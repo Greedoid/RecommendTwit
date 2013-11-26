@@ -1,2 +1,5 @@
 Flask==0.9
 birdy==0.1
+flask-wtf==0.9.3
+nltk==2.0.4
+
