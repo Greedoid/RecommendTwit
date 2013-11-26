@@ -29,9 +29,9 @@
   <footer class="span8">
   <script>
 	  $('#submit').click(function() { 
-		  $.getJSON('http://0.0.0.0/tweets/' + $('#handle').val(), function(data) { 
+		  $.getJSON('/tweets/' + $('#handle').val(), function(data) { 
 			  alert(data)
-			  $.get('http://0.0.0.0/level/' + $('#handle').val(), function (num) {
+			  $.get('/level/' + $('#handle').val(), function (num) {
 				$("#listurl").empty();
 				$("#listurl").append( '<h3 class="appendedstuff"> YOUR AUTOMATED READABILITY INDEX IS ' + num + '</h3>')
 			});
