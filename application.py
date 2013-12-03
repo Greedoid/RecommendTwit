@@ -3,6 +3,7 @@ from flask import render_template
 from classify import get_readability_index as get_level
 import json
 import readtweets as Reader
+import classify as Classifier
 from tweetgetter import TweetForm
 
 application = Flask(__name__)
@@ -21,8 +22,12 @@ def get_tweets_from_handle(handle):
 
 @application.route('/level/<handle>', methods=['GET']) #Calculated automated reading level using classify.py - called asynch via jQuery
 def get_reader_level_from_handle(handle):
-	print str(get_level(handle))
 	return str(get_level(handle))
+
+@application.route('/followers/<handle>', methods=['GET']) #Gets the user some people to follow
+def get_suggestions_from_handle(handle):
+	array = Classifier.get_suggestions(handle)
+	return json.dumps(array)
 
 if __name__ == '__main__':
 	application.debug = True

@@ -55,29 +55,16 @@ def get_names_from_category (slug):
 		names.append(member.name)
 	return names
 
-def get_classified_data(slug): #Makes 320 calls - TODO: do less than that or implement some constant service that will gradually populate this data set - we'll need a lot . . .
+def get_unclassified_data(slug): #Simply gets all tweets from a category and  
 	train = []
 	test = []
 	for name in get_names_from_category(slug):
 		tweets = tweet_array(name)
-		for i in range(0, len(tweets)):
-			if i % 4 == 0:
-				test.append((tweets[i], slug))
-			else:
-				train.append((tweets[i], slug))
-	return train, test
-
-def get_tiny_classified_data(slug):
-	train = []
-	test = []
-	names = get_names_from_category (slug)
-	for i in range(0,2):
-		tweets = tweet_array(names[i])
 		for j in range(0, len(tweets)):
 			if j % 4 == 0:
-				test.append((tweets[j], slug))
+				test.append(tweets[j])
 			else:
-				train.append((tweets[j], slug))
+				train.append(tweets[j])
 	return train, test
 
 def get_tiny_unclassified_data(slug):
@@ -93,15 +80,6 @@ def get_tiny_unclassified_data(slug):
 				train.append(tweets[j])
 	return train, test
 
-def put_tiny_classified_data(slug):
-	train = open('./data/train', 'a')
-	test = open('./data/test', 'a')
-	trainlist, testlist = get_tiny_classified_data(slug)
-	for item in trainlist:
-		print>>train, item
-	for item in testlist:
-		print>>test, item
-
 def put_tiny_segmented_data(slug):
 	trainstring = './data/' + slug + 'train'
 	teststring = './data/' + slug + 'test' 
@@ -113,4 +91,15 @@ def put_tiny_segmented_data(slug):
 	for item in testlist:
 		print>>test, item
 
-	
+
+def put_segmented_data(slug):
+	trainstring = './data/' + slug + 'train'
+	teststring = './data/' + slug + 'test' 
+	train = open(trainstring, 'w')
+	test = open(teststring, 'w')
+	trainlist, testlist = get_tiny_unclassified_data(slug)
+	for item in trainlist:
+		print>>train, item
+	for item in testlist:
+		print>>test, item
+

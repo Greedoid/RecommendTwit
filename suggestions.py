@@ -50,3 +50,13 @@ def add_tweets(handle, tweets): #Stores tweets as a blob of JSON - to get back, 
 	conn.commit()
 	if conn:
 		conn.close()
+
+def get_tweets(handle):
+	conn = sqlite3.connect('users.db')
+	cur = conn.cursor()
+	cur.execute("SELECT tweets FROM suggestions WHERE Handle = ?", [handle])
+	tweets = cur.fetchone()[0]
+	tweetarray = eval(str(tweets))
+	if conn: 
+		conn.close()
+	return tweetarray

@@ -1,6 +1,16 @@
 import readtweets as Reader
 import suggestions as DB
 import re
+import numpy as np
+from sklearn.pipeline import Pipeline
+from sklearn.feature_extraction.text import CountVectorizer
+from sklearn.svm import LinearSVC
+from sklearn.feature_extraction.text import TfidfTransformer
+from sklearn.multiclass import OneVsRestClassifier
+from sklearn.metrics import accuracy_score
+from sklearn import preprocessing
+from classio import *
+from suggestions import get_tweets
 
 def readability_index(tweetstring): #Calculate the automated readability index of the aggregated tweet string
 	sentence_array = re.split(r'[.!]+', tweetstring) #Counts !!!! as 4 sentences - surprisingly useful
@@ -24,3 +34,27 @@ def get_readability_index(name): #Actual method to call - checks to see if name 
 		print index
 		return index
 	
+X_train, y_train_text = get_train_as_nparray() 
+X_test = get_tweets('Perry_Huang')
+
+categories = Reader.get_suggestion_categories();
+target_names = []
+for item in categories:
+	target_names.append([str(item)])
+
+lb = preprocessing.LabelBinarizer()
+Y = lb.fit_transform(y_train_text)
+
+classifier = Pipeline([
+    ('vectorizer', CountVectorizer()),
+    ('tfidf', TfidfTransformer()),
+    ('clf', OneVsRestClassifier(LinearSVC()))])
+
+classifier.fit(X_train, Y)
+predicted = classifier.predict(X_test)
+all_labels = lb.inverse_transform(predicted)
+print all_labels
+
+#for item, labels in zip(X_test, all_labels):
+#	print '%s => %s' % (item, ', '.join(labels))
+#print accuracy_score(all_labels, y_test_text)

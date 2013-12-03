@@ -14,7 +14,7 @@
   <br>
   <h1>RecommendTwit</h1>
   <br>
-  <h3>Enter your twitter handle to see who you would be interested in following!</h3>
+  <h3>Enter your twitter handle to see your tweets and your automated reader level!</h3>
   <br>
 	<h3> Enter Twitter Handle: <br> 
 		{{form.handle(size=80)}}
@@ -29,11 +29,14 @@
   <footer class="span8">
   <script>
 	  $('#submit').click(function() { 
-	  	for (var i = 0; i< 5; i++) {
-		  $("#listurl").append('<a href="https://twitter.com/twitter" class="twitter-follow-button" data-show-count="false" data-show-screen-name="true" data-lang="en">Follow @Twitter</a>')
-!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");
-			}
-		});
+		  $.getJSON('/tweets/' + $('#handle').val(), function(data) { 
+			  alert(data)
+			  $.get('/level/' + $('#handle').val(), function (num) {
+				$("#listurl").empty();
+				$("#listurl").append( '<h3 class="appendedstuff"> YOUR AUTOMATED READABILITY INDEX IS ' + num + '</h3>')
+			});
+		  });
+	  });
   function partydropdown() {
     $("#listurl").empty();
 	$("#listurl").append('<h3 class="appendedstuff">http://veriparty.parseapp.com/event.html?'+(($("#partyurl").val().split('\/'))[4])+'</h3>');
