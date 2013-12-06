@@ -28,32 +28,20 @@ def tweet_array (name): #Does what print_all does, but returns an array
 				tweets.append(parser.get_text(z))
 	return tweets
 
-def tweet_sentence (name): #Does what print_all does, but returns one long string - useful for calculating the readability index
-	tweets = ''
-	request = client.api.statuses.user_timeline
-	min_id = MAGIC_NUMBER
-	for x in range (0, 15):
-		response = request.get(screen_name = name, count = 200, trim_user = 1, include_rts = 0, max_id = min_id)
-		parser = Parser(response.data)
-		min_id = parser.get_min_id()
-		for z in range (0, len(response.data)):
-			if (parser.get_text(z) != ''):
-				tweets = tweets + (parser.get_text(z)) + '.'
-	return tweets
-
-def get_suggestion_categories ():
+def get_suggestion_categories (): #Gets official twitter suggested user categories
 	categories = []
 	response = client.api.users.suggestions.get()
 	for suggestion in response.data:
 		categories.append(suggestion.slug)
 	return categories		
 
-def get_names_from_category (slug):
+def get_names_from_category (slug): #Gets the names from those categories
 	names = []
 	response = client.api.users.suggestions[slug].members.get()
 	for member in response.data:
-		names.append(member.name)
+		names.append(member.screen_name)
 	return names
+
 
 def get_unclassified_data(slug): #Simply gets all tweets from a category and  
 	train = []
@@ -67,11 +55,12 @@ def get_unclassified_data(slug): #Simply gets all tweets from a category and
 				train.append(tweets[j])
 	return train, test
 
-def get_tiny_unclassified_data(slug):
+
+def get_variable_unclassified_data(slug, start, end): #Gets a variable amount of data from API for a particular user group - good to avoid rate limiting
 	train = []
 	test = []
 	names = get_names_from_category (slug)
-	for i in range(0,2):
+	for i in range(start,end):
 		tweets = tweet_array(names[i])
 		for j in range(0, len(tweets)):
 			if j % 4 == 0:
@@ -80,24 +69,12 @@ def get_tiny_unclassified_data(slug):
 				train.append(tweets[j])
 	return train, test
 
-def put_tiny_segmented_data(slug):
+def put_variable_segmented_data(slug, start, end): #Appends the data from a particular user group into the files in the ./data folder - 75% train, 25% test
 	trainstring = './data/' + slug + 'train'
 	teststring = './data/' + slug + 'test' 
-	train = open(trainstring, 'w')
-	test = open(teststring, 'w')
-	trainlist, testlist = get_tiny_unclassified_data(slug)
-	for item in trainlist:
-		print>>train, item
-	for item in testlist:
-		print>>test, item
-
-
-def put_segmented_data(slug):
-	trainstring = './data/' + slug + 'train'
-	teststring = './data/' + slug + 'test' 
-	train = open(trainstring, 'w')
-	test = open(teststring, 'w')
-	trainlist, testlist = get_tiny_unclassified_data(slug)
+	train = open(trainstring, 'a')
+	test = open(teststring, 'a')
+	trainlist, testlist = get_variable_unclassified_data(slug, start, end)
 	for item in trainlist:
 		print>>train, item
 	for item in testlist:

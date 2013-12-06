@@ -1,11 +1,12 @@
 from flask import Flask
 from flask import render_template
-from classify import get_readability_index as get_level
 import json
 import readtweets as Reader
-import classify as Classifier
+from classifier import SVM
 from tweetgetter import TweetForm
 
+
+Classifier = SVM()
 application = Flask(__name__)
 application.config.from_object('config') #Need to have a secret key for WTForms
 
@@ -20,14 +21,10 @@ def get_tweets_from_handle(handle):
 	array = Reader.tweet_array(handle)
 	return json.dumps(array)
 
-@application.route('/level/<handle>', methods=['GET']) #Calculated automated reading level using classify.py - called asynch via jQuery
-def get_reader_level_from_handle(handle):
-	return str(get_level(handle))
-
-@application.route('/followers/<handle>', methods=['GET']) #Gets the user some people to follow
+@application.route('/suggestions/<handle>', methods=['GET']) #Gets the user some people to follow
 def get_suggestions_from_handle(handle):
-	array = Classifier.get_suggestions(handle)
-	return json.dumps(array)
+	suggestions = Classifier.get_user_suggestions(handle)
+	return json.dumps(suggestions)
 
 if __name__ == '__main__':
 	application.debug = True
