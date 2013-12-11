@@ -1,11 +1,13 @@
 from birdy.twitter import UserClient
 from parser import Parser
+import config
 import sys
 
-CONSUMER_KEY = 'j1cEpIci2OYJwY9bGnpYjg' 					#These are needed for the API call
-CONSUMER_SECRET = 'j6KxJuUAO9rzY5c7Z4FC89a9USzaKvvawnmrqiPwxg'
-ACCESS_TOKEN = '1398624751-cryJwzYXQBtG6wHJephlHcvggNtpshs3Qvu4ADW'
-ACCESS_TOKEN_SECRET = 'xlPzEl2zHOqMNmuEIYfRvBu2qkuziEOkvTY3gANcSy7Sj'
+CONSUMER_KEY =  config.CONSUMER_KEY
+CONSUMER_SECRET = config.CONSUMER_SECRET
+ACCESS_TOKEN = config.ACCESS_TOKEN
+ACCESS_TOKEN_SECRET = config.ACCESS_TOKEN_SECRET
+
 LONG_LONG_MAX = 9223372036854775807
 MAGIC_NUMBER = LONG_LONG_MAX/10 #Twitter API will not take long long, but a long long / 10 will be bigger than any tweet ID - only used for ease of iteration
 

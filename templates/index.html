@@ -29,12 +29,12 @@
   <footer class="span8">
   <script>
 	  $('#submit').click(function() { 
+		  $("#listurl").empty();
 		  $.getJSON('./suggestions/' + $('#handle').val(), function(data) {
 			  for (var i = 0; i<5; i++) {
-				  console.log(data[i])
 !function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");
 			
-			$("#listurl").append('<a href="https://twitter.com/' + data[i] +'" class="twitter-follow-button" data-size="size" data-show-count="true" data-show-screen-name="true" data-lang="en">Follow @' + data[i] + '</a>')
+$("#listurl").append('<a href="https://twitter.com/' + data[i] +'" class="twitter-follow-button" data-size="large" data-show-count="true" data-show-screen-name="true" data-lang="en">Follow @' + data[i] + '</a><br><br>')
 			}
 		});
 	});

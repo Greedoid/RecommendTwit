@@ -58,6 +58,13 @@ class SVM:
 		user_class = self.classify_handle(user)
 		handles = get_suggestions(user_class)
 		return handles
+
+	def test_accuracy(self, slug):
+		instances, y_labels = get_test_as_nparray(slug)
+		predicted = self.classifier.predict(instances)
+		labels = self.bin_labels.inverse_transform(predicted)
+		return accuracy_score(labels, y_labels)
+	
 		
 
 				
